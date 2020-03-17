@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiaoyu.dao.ManagerMapper">
+  <resultMap id="BaseResultMap" type="com.jiaoyu.entity.Manager">
+    <id column="manage_id" jdbcType="INTEGER" property="manageId" />
+    <result column="password" jdbcType="CHAR" property="password" />
+    <result column="access" jdbcType="VARCHAR" property="access" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="manage_name" jdbcType="VARCHAR" property="managerName" />
+  </resultMap>
+   <select id="getManagerByName" resultMap="BaseResultMap">
+     select * from t_manager where manage_name=#{managerName} and status='正常'
+   </select>
+
+</mapper>

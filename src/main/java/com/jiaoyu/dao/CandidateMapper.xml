@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiaoyu.dao.CandidateMapper">
+  <resultMap id="BaseResultMap" type="com.jiaoyu.entity.Candidate">
+    <id column="candidate_id" jdbcType="INTEGER" property="candidateId" />
+    <result column="candidate_name" jdbcType="VARCHAR" property="candidateName" />
+    <result column="sex" jdbcType="CHAR" property="sex" />
+    <result column="card_num" jdbcType="VARCHAR" property="cardNum" />
+    <result column="candidate_num" jdbcType="VARCHAR" property="candidateNum" />
+    <result column="candidate_occasion" jdbcType="VARCHAR" property="candidateOccasion" />
+    <result column="classroom" jdbcType="VARCHAR" property="classroom" />
+    <result column="seat_num" jdbcType="VARCHAR" property="seatNum" />
+    <result column="is_old_solider" jdbcType="CHAR" property="isOldSolider" />
+  </resultMap>
+<!--根据条件进行模糊查询-->
+  <select id="getPageByCondition" resultMap="BaseResultMap">
+      select * from t_candidate
+      <where>
+        <trim prefixOverrides="and">
+          <if test="information!=null and information !=''">
+              and candidate_name like concat('%',#{information},'%')
+          </if>
+        </trim>
+
+      </where>
+  </select>
+</mapper>

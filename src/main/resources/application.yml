@@ -1,0 +1,19 @@
+spring:
+  thymeleaf:
+    cache: false
+  datasource:
+    username: root
+    password: 123
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/jiaoyu
+
+mybatis:
+  type-aliases-package: com.jiaoyu.entity
+  mapper-locations: classpath:com/jiaoyu/dao/*.xml
+mapper:
+  mappers: tk.mybatis.mapper.common.Mapper
+  identity: mysql
+pagehelper:
+  helper-dialect: mysql
+server:
+  port: 8081

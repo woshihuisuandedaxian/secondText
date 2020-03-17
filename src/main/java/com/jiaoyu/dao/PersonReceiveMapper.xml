@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiaoyu.dao.PersonReceiveMapper">
+  <resultMap id="BaseResultMap" type="com.jiaoyu.entity.PersonReceive">
+    <id column="person_id" jdbcType="INTEGER" property="personId" />
+    <result column="person_name" jdbcType="VARCHAR" property="personName" />
+    <result column="shenfenzheng_num" jdbcType="VARCHAR" property="shenfenzhengNum" />
+    <result column="kaosheng_num" jdbcType="VARCHAR" property="kaoshengNum" />
+    <result column="kaosheng_score" jdbcType="DOUBLE" property="kaoshengScore" />
+    <result column="luqu_occasion" jdbcType="VARCHAR" property="luquOccasion" />
+    <result column="is_old_solider" jdbcType="CHAR" property="isOldSolider" />
+  </resultMap>
+<!--根据退伍军人进行模糊查询并返回一个录取人数的集合-->
+  <select id="soliderPage" resultMap="BaseResultMap">
+    select * from person_receive
+    <where >
+      <trim prefixOverrides="and">
+      <if test="soliderName !='' and soliderName!=null">
+       and person_name like concat ('%',#{soliderName},'%')
+      </if>
+      and is_old_solider='是' order by kaosheng_score desc
+      </trim>
+    </where>
+
+  </select>
+  <!--根据是否是社会人员录取-->
+  <select id="socialPage" resultMap="BaseResultMap">
+    select * from person_receive
+    <where >
+      <trim prefixOverrides="and">
+        <if test="socialName !='' and socialName!=null">
+          and person_name like concat ('%',#{socialName},'%')
+        </if>
+        and is_old_solider='否' order by kaosheng_score desc
+      </trim>
+    </where>
+
+  </select>
+  <!--查询退伍军人的录取人的数量-->
+  <select id="selectReceiveSolider" resultType="int">
+      select count(*) from person_receive where is_old_solider='是' and not luqu_occasion ='未录取'
+  </select>
+  <!--查询社会人员的录取人的数量-->
+  <select id="selectReceiveSocial" resultType="int">
+    select count(*) from person_receive where is_old_solider='否' and not luqu_occasion ='未录取'
+  </select>
+</mapper>

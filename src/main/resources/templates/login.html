@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <base href="/">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="css/H-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/H-ui.login.css" rel="stylesheet" type="text/css" />
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <link href="lib/Hui-iconfont/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript">
+       <!--点击看不清时重新生成验证码图片-->
+        function changeImage(image) {
+         image.src="code/getCode?"+Math.random();
+            
+        }
+        /** 点击看不清时*/
+        function kanbuq() {
+
+            $("#imageCode").attr("src", location._href="code/getCode?"+Math.random());
+
+        }
+    </script>
+</head>
+<body>
+<input type="hidden" id="TenantId" name="TenantId" value="" />
+<div class="header"></div>
+<div class="loginWraper">
+    <div id="loginform" class="loginBox">
+        <form class="form form-horizontal" action="manager/login" method="post">
+            <div class="row cl">
+                <label class="form-label col-3"><i class="Hui-iconfont">&#xe60d;</i></label>
+                <div class="formControls col-8">
+                    <input id="managerName" name="managerName" type="text" placeholder="账户" class="input-text size-L">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-3"><i class="Hui-iconfont">&#xe63f;</i></label>
+                <div class="formControls col-8">
+                    <input id="password" name="password" type="password" placeholder="密码" class="input-text size-L">
+                </div>
+            </div>
+            <div class="row cl">
+                <div class="formControls col-8 col-offset-3">
+                    <input class="input-text size-L" type="text" placeholder="验证码" name="code" style="width:150px;">
+                    <img  src="code/getCode" id="imageCode" onclick="changeImage(this)"/> <a id="kanbuq" onclick="kanbuq()" >看不清，换一张</a> </div>
+            </div>
+            <!--<div class="row">
+                <div class="formControls col-8 col-offset-3">
+                    <label for="online">
+                        <input type="checkbox" name="online" id="online" value="">
+                        使我保持登录状态</label>
+                </div>
+            </div>-->
+            <div class="row">
+                <div class="formControls col-8 col-offset-3">
+                    <input name="" type="submit" class="btn btn-success radius size-L" value="&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;">
+                    <input name="" type="reset" class="btn btn-default radius size-L" value="&nbsp;取&nbsp;&nbsp;&nbsp;&nbsp;消&nbsp;">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="footer">Copyright@2019 <span>江西信息应用职业技术学院</span></div>
+</body>
+</html>

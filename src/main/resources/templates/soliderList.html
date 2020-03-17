@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <base href="/">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="css/H-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <link href="lib/Hui-iconfont/1.0.1/iconfont.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<nav class="breadcrumb">考生总数量:<span style="color:red;" id="sumkao"></span>&nbsp;&nbsp;退伍考生数:<span style="color:green;" id="allSolider"></span>&nbsp;&nbsp;退伍录取数:<span style="color:red;" id="receiveSolider"></span>&nbsp;&nbsp;社招考生数:<span style="color: green;" id="allSocial"></span>&nbsp;&nbsp;社招录取数:<span style="color: red;" id="receiveSocial"></span>
+    <!--<i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 考生信息管理<span class="c-gray en">&gt;</span> 考生信息列表 --><a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="pd-20">
+
+    <div class="text-c">
+        <div class="row cl ">
+            <div class="formControls col-6">
+                考生信息: <input type="text" class="input-text" style="width: 220px" id="solider" placeholder="请输入考生姓名" th:value="${session.soliderName}"/>
+                <button type="button" class="btn btn-success radius" onclick="selectSolider()"> <i class="Hui-iconfont">&#xe665;</i>搜索</button>
+                <button class="btn btn-warning radius" id="batchSolider">拟录取</button>
+                <button class="btn btn-danger radius" id="successSolider">正式录取</button>
+                <button class="btn btn-secondary radius" id="resetSolider">未录取</button>
+            </div>
+            <!-- <div class="formControls col-4">
+                 邮箱： <input type="text" class="input-text" name="email" style="width: 250px">
+             </div>
+             <div class="formControls col-5">
+                 手机： <input type="text"  name="phone" class="input-text" style="width: 250px">
+             </div>-->
+        </div>
+        <!--<div class="row cl">
+            <div class="cl pd-5">
+                <button type="submit"
+                        class="btn btn-success radius" id="" name="">
+                    <i class="Hui-iconfont">&#xe665;</i> 搜用户
+                </button>
+            </div>
+        </div>-->
+    </div>
+
+    <!--  <div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+          <a href="javascript:;" onclick="admin_add('添加员工','user/addUser','800','500')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加员工</a></span> <span class="r">共有数据：<strong>54</strong> 条</span> </div>-->
+    <table class="table table-border table-bordered table-bg">
+        <thead>
+        <tr>
+            <th scope="col" colspan="10">考生列表</th>
+        </tr>
+        <tr class="text-c">
+            <th width="25"><input type="checkbox" name="" value="" ></th>
+            <th width="40">ID</th>
+            <th width="150">姓名</th>
+            <th width="90">身份证号</th>
+            <th width="150">考生号</th>
+            <th width="130">考生成绩</th>
+            <th width="130">录取状况</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr class="text-c" th:each="solider : ${session.page.list}">
+            <td><input type="checkbox" th:value="${solider.personId}" name="" class="addBox"></td>
+            <td th:text="${solider.personId}"></td>
+            <td th:text="${solider.personName}"></td>
+            <td th:text="${solider.shenfenzhengNum}"></td>
+            <td th:text="${solider.kaoshengNum}"></td>
+            <td th:text="${solider.kaoshengScore}"></td>
+            <td th:text="${solider.luquOccasion}"></td>
+        </tr>
+
+        </tbody>
+    </table>
+    <!--在thymeleaf引入分页插件的语法，语法-->
+    <div th:replace="/common/page::pageDivthy">
+    </div>
+</div>
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="lib/layer/1.9.3/layer.js"></script>
+<script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript" src="lib/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="js/H-ui.js"></script>
+<script type="text/javascript" src="js/H-ui.admin.js"></script>
+<script type="text/javascript">
+
+
+    /*
+        参数解释：
+        title	标题
+        url		请求的url
+        id		需要操作的数据id
+        w		弹出层宽度（缺省调默认值）
+        h		弹出层高度（缺省调默认值）
+    */
+
+    /** 点击搜索框，通过考生的姓名，考生号，身份证号等所搜考生信息*/
+    function selectSolider(){
+        var solider = $("#solider").val();
+        location.href="person/soliderPage?soliderName="+solider;
+
+    }
+    /** 页面加载总考生人数，总退伍考生人数，退伍录取数，总社会人员数，社会人员录取数*/
+    $(function () {
+        $.ajax({
+            type:"GET",
+            url:"person/receiveKao",
+            success:function (data) {
+                $("#sumkao").html(data.sumkao);
+                $("#allSolider").html(data.allSolider);
+                $("#receiveSolider").html(data.receiveSolider);
+                $("#allSocial").html(data.allSocial);
+                $("#receiveSocial").html(data.receiveSocial);
+
+            }
+        })
+
+    })
+    /** 点击拟录取的时候触发的事件*/
+    $(function(){
+        $("#batchSolider").click(function(){
+
+            layer.confirm('确认要拟录取这些考生吗？',function(index){
+                //找到选中的复选框，取考生的id
+                var checkeds = $(".addBox:checked");
+                if(checkeds.length==0){
+                    layer.msg('请选择要拟录取的考生!',{icon:2,time:2000});
+                    return;
+                }
+                //定义一个数组来装id
+                var ids = [];
+                //遍历checkeds，把id装到数组中
+                for(var i=0;i<checkeds.length;i++){
+                    //把id装到数组中
+                    ids.push(checkeds[i].value);
+                }
+                //发送异步请求，把数据带到后端
+                $.ajax({
+                    url:"person/batchSolider",
+                    type:"GET",
+                    data:"idsList="+ids,  //html中获取值的方式
+                    success:function(data){
+                        //判断这个添加的操作是否成功
+                        if(data.result){
+                            layer.msg('考生拟录取成功!',{icon:1,time:2000},function(){
+                                location.reload();
+                            });
+
+                        }else{
+                            layer.msg('考生拟录取失败!',{icon:2,time:2000});
+                        }
+                    }
+                });
+            });
+        });
+    });
+    /** 点击录取的时候触发的事件*/
+    $(function(){
+        $("#successSolider").click(function(){
+
+            layer.confirm('确认要录取这些考生吗？',function(index){
+                //找到选中的复选框，取考生的id
+                var checkeds = $(".addBox:checked");
+                if(checkeds.length==0){
+                    layer.msg('请选择要录取的考生!',{icon:2,time:2000});
+                    return;
+                }
+                //定义一个数组来装id
+                var ids = [];
+                //遍历checkeds，把id装到数组中
+                for(var i=0;i<checkeds.length;i++){
+                    //把id装到数组中
+                    ids.push(checkeds[i].value);
+                }
+                //发送异步请求，把数据带到后端
+                $.ajax({
+                    url:"person/successSolider",
+                    type:"GET",
+                    data:"idsList="+ids,  //html中获取值的方式
+                    success:function(data){
+                        //判断这个添加的操作是否成功
+                        if(data.result){
+                            layer.msg('考生录取成功!',{icon:1,time:2000},function(){
+                                location.reload();
+                            });
+
+                        }else{
+                            layer.msg('考生录取失败!',{icon:2,time:2000});
+                        }
+                    }
+                });
+            });
+        });
+    });
+    /** 点击未录取的时候触发的事件*/
+    $(function(){
+        $("#resetSolider").click(function(){
+
+            layer.confirm('确认不录取这些考生吗？',function(index){
+                //找到选中的复选框，取考生的id
+                var checkeds = $(".addBox:checked");
+                if(checkeds.length==0){
+                    layer.msg('请选择不录取的考生!',{icon:2,time:2000});
+                    return;
+                }
+                //定义一个数组来装id
+                var ids = [];
+                //遍历checkeds，把id装到数组中
+                for(var i=0;i<checkeds.length;i++){
+                    //把id装到数组中
+                    ids.push(checkeds[i].value);
+                }
+                //发送异步请求，把数据带到后端
+                $.ajax({
+                    url:"person/resetSolider",
+                    type:"GET",
+                    data:"idsList="+ids,  //html中获取值的方式
+                    success:function(data){
+                        //判断这个添加的操作是否成功
+                        if(data.result){
+                            layer.msg('不录取考生成功!',{icon:1,time:2000},function(){
+                             location.reload();
+                            });
+                        }else{
+                            layer.msg('不录取考生失败!',{icon:2,time:2000});
+                        }
+                    }
+                });
+            });
+        });
+    });
+</script>
+</body>
+</html>

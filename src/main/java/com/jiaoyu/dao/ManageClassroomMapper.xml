@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiaoyu.dao.ManageRoomMapper">
+  <resultMap id="BaseResultMap" type="com.jiaoyu.entity.ManageRoom">
+    <id column="classroom_id" jdbcType="INTEGER" property="classroomId" />
+    <result column="t_name" jdbcType="VARCHAR" property="tName" />
+    <result column="t_classroom" jdbcType="VARCHAR" property="tClassroom" />
+    <result column="t_seat" jdbcType="INTEGER" property="tSeat" />
+    <result column="t_order" jdbcType="VARCHAR" property="tOrder" />
+    <result column="left_seat" jdbcType="INTEGER" property="leftSeat" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+  </resultMap>
+  <select id="selectLeftList" resultMap="BaseResultMap">
+    select * from manage_classroom where status='启用' and left_seat != 0
+  </select>
+  <!--根据考场名查找考场对象-->
+  <select id="getClassRoomByName" resultMap="BaseResultMap">
+     select * from manage_classroom where t_name=#{candidateOccasion}
+  </select>
+  <!--根据考场输入的名字进行模糊查询,返回一个考场的集合-->
+  <select id="selectOccassion" resultMap="BaseResultMap">
+    select * from manage_classroom
+    <where>
+       <if test="kaoName !=null and kaoName!=''">
+         t_name like concat('%',#{kaoName},'%')
+       </if>
+    </where>
+
+  </select>
+</mapper>

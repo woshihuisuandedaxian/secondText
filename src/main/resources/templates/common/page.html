@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+
+<head>
+   <base href="/">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--为了能在thymeleaf的页面中引用，fragment后面的变量可以任意命名-->
+<div th:fragment="pageDivthy">
+    <!--<base th:href="${#request.getContextPath()+'/'}"/>-->
+    <link rel="stylesheet" href="lib/layer/ui/css/layui.css" media="all">
+    <script src="lib/layer/ui/layui.js"></script>
+<!-- 这个div用来显示分页导航条的 -->
+<div id="pageDiv"></div>
+<script>
+    // 初始化分页导航条
+    layui.use('laypage', function() {
+        var laypage = layui.laypage;
+
+        // JS中获取域对象中的值，为了能够在页面中点击下一页和跳转页面时，动态的跳转和显示
+        var total = [[${session.page.total}]];
+        var limit = [[${session.page.pageSize}]];
+        var pageNum = [[${session.page.pageNum}]];
+        var url = "[[${session.url}]]";
+        //var url = "[[${url}]]"; //url外面要加双引号
+        var information="[[${session.information}]]";
+        var kaoName="[[${session.kaoName}]]";
+        var soliderName="[[${session.soliderName}]]";
+        var socialName="[[${session.socialName}]]";
+
+
+
+        laypage.render({
+            elem : 'pageDiv' // 存放导航条的容器的ID
+            ,count : total // 总条数/
+            ,limit : limit  //每页显示条数
+            ,curr: pageNum // 当前页
+            ,layout : [ 'prev', 'page', 'next', 'limit', 'count' ]
+            ,limits:[1,5,10,30,50]
+
+
+            ,jump : function(obj, first) { // 切换分页的回调
+
+                if (!first) {
+                    // 查询切换页面的数据
+                    location.href=url+"?pageNum="+obj.curr+"&pageSize="+obj.limit+"&information="+information+"&kaoName="+kaoName+"&soliderName="+soliderName+"&socialName="+socialName;
+
+                }
+            }
+        });
+
+    });
+    layui.config({
+        version: '1.0.1'
+    }).use(['jquery','element','form','laydate','table'],function () {
+       $=layui.jquery;
+       var element= layui.element;
+       var table= layui.table;
+       form = layui.form;
+       var laydate= layui.laydate;
+       form.render();
+    })
+</script>
+</div>
+</body>
+</html>
