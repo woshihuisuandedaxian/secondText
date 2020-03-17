@@ -50,7 +50,7 @@ public class CandidateController {
         session.setAttribute("url","candidate/candidatePage");
         session.setAttribute("information",information);
         session.setAttribute("page",pageInfo);
-       
+        systemout("----");
         return "candidateList";
 
     }
