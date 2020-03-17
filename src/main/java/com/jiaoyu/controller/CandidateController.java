@@ -9,6 +9,7 @@ import com.jiaoyu.entity.Candidate;
 import com.jiaoyu.entity.ManageRoom;
 import com.jiaoyu.service.ICandidateService;
 import com.jiaoyu.service.IClassRoomService;
+import com.sun.org.apache.xpath.internal.SourceTreeManager;
 import com.sun.scenario.animation.AnimationPulseMBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -50,7 +51,7 @@ public class CandidateController {
         session.setAttribute("url","candidate/candidatePage");
         session.setAttribute("information",information);
         session.setAttribute("page",pageInfo);
-        systemout("----");
+        System.out.println("CandidateController.getPage");
         return "candidateList";
 
     }
